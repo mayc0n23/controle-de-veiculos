@@ -4,10 +4,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import br.com.controledeveiculos.entity.User;
+import br.com.controledeveiculos.exception.FailedToFetchUserException;
 import br.com.controledeveiculos.exception.FailedToRegisterUserException;
 
 public class UserRepository {
@@ -58,6 +60,33 @@ public class UserRepository {
 		} finally {
 			connection.disconnect();
 		}
+	}
+	
+	public Optional<User> findByUsernameAndPassword(String username, String password) throws FailedToFetchUserException {
+		Optional<User> response = Optional.empty();
+		connection = MySQLConnection.getInstance();
+		String query = "SELECT id, name, username, password FROM user WHERE username = ? and password = ?";
+		try {
+			connection.connect();
+			statement = connection.getConnection().prepareStatement(query);
+			statement.setString(1, username);
+			statement.setString(2, password);
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				User user = new User();
+				user.setId(resultSet.getInt(1));
+				user.setName(resultSet.getString(2));
+				user.setUsername(resultSet.getString(3));
+				user.setPassword(resultSet.getString(4));
+				response = Optional.of(user);
+			}
+		} catch (Exception exception) {
+			Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, null, exception);
+			throw new FailedToFetchUserException("Falha ao fazer login! Tente novamente..");
+		} finally {
+			connection.disconnect();
+		}
+		return response;
 	}
 	
 }
