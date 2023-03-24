@@ -9,6 +9,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import br.com.controledeveiculos.view.LoginScreen;
+import br.com.controledeveiculos.view.RegisterVehicleScreen;
+import br.com.controledeveiculos.view.VehicleSoldListScreen;
 import br.com.controledeveiculos.view.AvailableVehicleListScreen;
 
 public class MenuBar extends JMenuBar {
@@ -33,7 +35,8 @@ public class MenuBar extends JMenuBar {
 		JMenuItem listOfVehiclesSoldMenu = new JMenuItem("Veículos vendidos");
 		listOfVehiclesSoldMenu.addActionListener((ActionListener) new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				screen.dispose();
+				new VehicleSoldListScreen();
 			}
 		});
 		vehiclesMenu.add(listOfVehiclesSoldMenu); 
@@ -41,7 +44,8 @@ public class MenuBar extends JMenuBar {
 		JMenuItem vehicleEntrance = new JMenuItem("Entrada de um novo veículo");
 		vehicleEntrance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				screen.dispose();
+				new RegisterVehicleScreen();
 			}
 		});
 		vehiclesMenu.add(vehicleEntrance);

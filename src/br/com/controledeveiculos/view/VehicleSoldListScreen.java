@@ -15,9 +15,9 @@ import br.com.controledeveiculos.service.UserService;
 import br.com.controledeveiculos.service.VehicleService;
 import br.com.controledeveiculos.view.template.LargeView;
 
-public class AvailableVehicleListScreen extends LargeView {
-
-	private static final long serialVersionUID = -741211066483646413L;
+public class VehicleSoldListScreen extends LargeView {
+	
+	private static final long serialVersionUID = 5396333298175805263L;
 	
 	private VehicleService service;
 	private List<Vehicle> vehicles;
@@ -25,8 +25,8 @@ public class AvailableVehicleListScreen extends LargeView {
 	private DefaultTableModel vehicleTableModel;
 	private JTable vehiclesTable;
 	
-	public AvailableVehicleListScreen() {
-		this.setTitle(this.getTitle() + "Lista de veículos disponíveis");
+	public VehicleSoldListScreen() {
+		this.setTitle(this.getTitle() + "Lista de veículos vendidos");
 		this.setVisible(true);
 	}
 
@@ -50,7 +50,7 @@ public class AvailableVehicleListScreen extends LargeView {
 	@Override
 	public void addTables() {
 		this.service = new VehicleService();
-		this.vehicles = this.service.listOfAvailableVehicles();
+		this.vehicles = this.service.listOfVehiclesSold();
 		vehicleTableModel = new DefaultTableModel() {
 
 			private static final long serialVersionUID = 8972832026170338243L;
@@ -65,13 +65,13 @@ public class AvailableVehicleListScreen extends LargeView {
 		vehiclesTable.getTableHeader().setReorderingAllowed(false);
 		vehiclesTable.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		
-		String[] vehicleColumns = {"ID", "TIPO", "DESCRIÇÃO", "PLACA", "CHASSI", "RENAVAM", "VALOR"};
+		String[] vehicleColumns = {"ID", "TIPO", "DESCRIÇÃO", "PLACA", "CHASSI", "RENAVAM", "COMPRADOR"};
 		for(String column: vehicleColumns) {
 			vehicleTableModel.addColumn(column);
 		}
 		for(Vehicle vehicle: vehicles) {
 			Object[] data = {vehicle.getId(), vehicle.getType(), vehicle.getDescription(), vehicle.getPlate(), vehicle.getChassis(), 
-					vehicle.getRenavam(), vehicle.getSalePrice()};
+					vehicle.getRenavam(), vehicle.getOutName()};
 			vehicleTableModel.addRow(data);
 		}
 		JScrollPane vehicleContainer = new JScrollPane(vehiclesTable);

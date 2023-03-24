@@ -23,6 +23,7 @@ public abstract class LargeView extends JFrame {
 	}
 	
 	public final void buildComponents() {
+		this.addPanel();
 		this.addLabels();
 		this.addButtons();
 		this.addTextFields();
@@ -45,5 +46,6 @@ public abstract class LargeView extends JFrame {
 	public abstract void addTextFields();
 	public abstract void addTables();
 	public abstract void addMenu();
+	public abstract void addPanel();
 
 }
