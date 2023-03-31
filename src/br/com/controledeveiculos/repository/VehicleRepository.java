@@ -32,7 +32,7 @@ public class VehicleRepository {
 				vehicle.setPlate(resultSet.getString(3));
 				vehicle.setChassis(resultSet.getString(4));
 				vehicle.setRenavam(resultSet.getString(5));
-				vehicle.setSalePrice(resultSet.getDouble(6));
+				vehicle.setSalePrice(resultSet.getString(6));
 				vehicle.setObservation(resultSet.getString(7));
 				vehicle.setType(resultSet.getString(8));
 				vehicle.setInName(resultSet.getString(9));
@@ -65,7 +65,7 @@ public class VehicleRepository {
 				vehicle.setPlate(resultSet.getString(3));
 				vehicle.setChassis(resultSet.getString(4));
 				vehicle.setRenavam(resultSet.getString(5));
-				vehicle.setSalePrice(resultSet.getDouble(6));
+				vehicle.setSalePrice(resultSet.getString(6));
 				vehicle.setObservation(resultSet.getString(7));
 				vehicle.setType(resultSet.getString(8));
 				vehicle.setInName(resultSet.getString(9));

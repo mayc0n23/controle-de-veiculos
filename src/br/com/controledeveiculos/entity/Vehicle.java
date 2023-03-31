@@ -13,7 +13,7 @@ public class Vehicle {
 	
 	private String renavam;
 	
-	private Double salePrice;
+	private String salePrice;
 	
 	private String type;
 	
@@ -85,11 +85,11 @@ public class Vehicle {
 		this.renavam = renavam;
 	}
 
-	public Double getSalePrice() {
+	public String getSalePrice() {
 		return salePrice;
 	}
 
-	public void setSalePrice(Double salePrice) {
+	public void setSalePrice(String salePrice) {
 		this.salePrice = salePrice;
 	}
 

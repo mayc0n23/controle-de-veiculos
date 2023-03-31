@@ -30,7 +30,7 @@ public class LoginScreen extends LowView {
 		title.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		title.setForeground(Color.BLACK);
 		title.setVisible(true);
-		title.setBounds(45, 15, 300, 18);
+		title.setBounds(45, 20, 300, 18);
 		this.add(title);
 		
 		JLabel usernameLabel = new JLabel();
@@ -72,7 +72,7 @@ public class LoginScreen extends LowView {
 		
 		passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		passwordField.setBounds(12, 151, 368, 24);
+		passwordField.setBounds(12, 154, 368, 24);
 		this.add(passwordField);
 	}
 
