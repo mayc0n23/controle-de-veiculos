@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import br.com.controledeveiculos.actions.RegisterVehicleAction;
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.view.template.LargeView;
 
@@ -168,6 +169,7 @@ public class RegisterVehicleScreen extends LargeView {
 		register.setBackground(Color.BLACK);
 		register.setForeground(Color.BLACK);
 		register.setBounds(290, 590, 200, 30);
+		register.addActionListener(new RegisterVehicleAction(this));
 		this.add(register);
 	}
 
@@ -257,6 +259,58 @@ public class RegisterVehicleScreen extends LargeView {
 		sellerPanel.setBounds(20, 350, 755, 1);
 		sellerPanel.setBackground(Color.GRAY);
 		this.add(sellerPanel);
+	}
+
+	public JTextField getDescriptionField() {
+		return descriptionField;
+	}
+
+	public JTextField getPlateField() {
+		return plateField;
+	}
+
+	public JTextField getChassiField() {
+		return chassiField;
+	}
+
+	public JTextField getRenavamField() {
+		return renavamField;
+	}
+
+	public JComboBox<String> getVehicleTypeField() {
+		return vehicleTypeField;
+	}
+
+	public JTextField getPriceField() {
+		return priceField;
+	}
+
+	public JTextArea getObservationField() {
+		return observationField;
+	}
+
+	public JTextField getSellerNameField() {
+		return sellerNameField;
+	}
+
+	public JTextField getSellerAddressField() {
+		return sellerAddressField;
+	}
+
+	public JTextField getSellerPhoneField() {
+		return sellerPhoneField;
+	}
+
+	public JTextField getSellerCpfField() {
+		return sellerCpfField;
+	}
+
+	public JTextField getSellerRgField() {
+		return sellerRgField;
+	}
+
+	public JTextField getSellerPaymentDescriptionField() {
+		return sellerPaymentDescriptionField;
 	}
 
 }

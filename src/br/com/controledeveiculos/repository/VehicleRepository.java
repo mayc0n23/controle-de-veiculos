@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import br.com.controledeveiculos.entity.Vehicle;
+import br.com.controledeveiculos.exception.FailedToRegisterVehicleException;
 
 public class VehicleRepository {
 	
@@ -41,6 +42,7 @@ public class VehicleRepository {
 				vehicle.setInPaymentDescription(resultSet.getString(12));
 				vehicle.setInRg(resultSet.getString(13));
 				vehicle.setInCpf(resultSet.getString(14));
+				vehicles.add(vehicle);
 			}
 		} catch (Exception exception) {
 			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
@@ -80,6 +82,7 @@ public class VehicleRepository {
 				vehicle.setOutPaymentDescription(resultSet.getString(18));
 				vehicle.setOutRg(resultSet.getString(19));
 				vehicle.setOutCpf(resultSet.getString(20));
+				vehicles.add(vehicle);
 			}
 		} catch (Exception exception) {
 			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
@@ -87,6 +90,35 @@ public class VehicleRepository {
 			connection.disconnect();
 		}
 		return vehicles;
+	}
+	
+	public boolean register(Vehicle vehicle) throws FailedToRegisterVehicleException {
+		connection = MySQLConnection.getInstance();
+		String query = "INSERT INTO vehicle (description, plate, chassis, renavam, sale_price, observation, type, in_name, in_address, in_phone, in_payment_description, in_rg, in_cpf) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		try {
+			connection.connect();
+			statement = connection.getConnection().prepareStatement(query);
+			statement.setString(1, vehicle.getDescription());
+			statement.setString(2, vehicle.getPlate());
+			statement.setString(3, vehicle.getChassis());
+			statement.setString(4, vehicle.getRenavam());
+			statement.setString(5, vehicle.getSalePrice());
+			statement.setString(6, vehicle.getObservation());
+			statement.setString(7, vehicle.getType());
+			statement.setString(8, vehicle.getInName());
+			statement.setString(9, vehicle.getInAddress());
+			statement.setString(10, vehicle.getInPhone());
+			statement.setString(11, vehicle.getInPaymentDescription());
+			statement.setString(12, vehicle.getInRg());
+			statement.setString(13, vehicle.getInCpf());
+			statement.execute();
+			return true;
+		} catch (Exception exception) {
+			Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, null, exception);
+			throw new FailedToRegisterVehicleException("Falha ao cadastrar o veículo! Tente novamente.");
+		} finally {
+			connection.disconnect();
+		}
 	}
 	
 }

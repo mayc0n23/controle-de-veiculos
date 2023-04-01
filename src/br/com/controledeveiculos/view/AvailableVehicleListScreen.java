@@ -1,12 +1,14 @@
 package br.com.controledeveiculos.view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import br.com.controledeveiculos.components.MenuBar;
@@ -51,6 +53,7 @@ public class AvailableVehicleListScreen extends LargeView {
 	public void addTables() {
 		this.service = new VehicleService();
 		this.vehicles = this.service.listOfAvailableVehicles();
+
 		vehicleTableModel = new DefaultTableModel() {
 
 			private static final long serialVersionUID = 8972832026170338243L;
@@ -64,6 +67,18 @@ public class AvailableVehicleListScreen extends LargeView {
 		vehiclesTable = new JTable(vehicleTableModel);
 		vehiclesTable.getTableHeader().setReorderingAllowed(false);
 		vehiclesTable.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		vehiclesTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+
+			private static final long serialVersionUID = 3435114482235721602L;
+
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				final Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				component.setBackground(row % 2 == 0 ? Color.decode("#F0F0F0") : Color.WHITE);
+				return component;
+			}
+			
+		});
 		
 		String[] vehicleColumns = {"ID", "TIPO", "DESCRIÇÃO", "PLACA", "CHASSI", "RENAVAM", "VALOR"};
 		for(String column: vehicleColumns) {
