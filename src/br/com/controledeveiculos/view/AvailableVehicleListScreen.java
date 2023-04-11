@@ -3,9 +3,13 @@ package br.com.controledeveiculos.view;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -13,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Vehicle;
+import br.com.controledeveiculos.exception.FailedToDeleteVehicleException;
 import br.com.controledeveiculos.service.UserService;
 import br.com.controledeveiculos.service.VehicleService;
 import br.com.controledeveiculos.view.template.LargeView;
@@ -44,7 +49,79 @@ public class AvailableVehicleListScreen extends LargeView {
 	}
 
 	@Override
-	public void addButtons() { }
+	public void addButtons() {
+		JButton edit = new JButton();
+		edit.setText("Editar");
+		edit.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		edit.setOpaque(true);
+		edit.setBackground(Color.BLACK);
+		edit.setForeground(Color.BLACK);
+		edit.setBounds(125, 600, 150, 30);
+		edit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (vehiclesTable.getSelectedRow() >= 0) {
+					int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+					new EditVehicleScreen(vehicleId);
+					dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+				}
+			}
+			
+		});
+		this.add(edit);
+		
+		JButton delete = new JButton();
+		delete.setText("Excluir");
+		delete.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		delete.setOpaque(true);
+		delete.setBackground(Color.BLACK);
+		delete.setForeground(Color.BLACK);
+		delete.setBounds(305, 600, 150, 30);
+		delete.addActionListener(new ActionListener() {
+	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (vehiclesTable.getSelectedRow() >= 0) {
+					String vehicleDescription = (String) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 2);
+					int confirmDialogResponse = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o veículo '" + vehicleDescription + "'?", "Excluir veículo", 0);
+					if (confirmDialogResponse == 0) {
+						deleteVehicleFromDatabase();
+						deleteVehicleFromTable();
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+				}
+			}
+			
+			private void deleteVehicleFromDatabase() {
+				int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+				try {
+					service.delete(vehicleId);
+				} catch (FailedToDeleteVehicleException exception) {
+					JOptionPane.showMessageDialog(null, "Falha ao tentar excluir o veículo selecionado.");
+				}
+			}
+			
+			private void deleteVehicleFromTable() {
+				vehicleTableModel.removeRow(vehiclesTable.getSelectedRow());
+			}
+			
+		});
+		this.add(delete);
+		
+		JButton sell = new JButton();
+		sell.setText("Vender");
+		sell.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		sell.setOpaque(true);
+		sell.setBackground(Color.BLACK);
+		sell.setForeground(Color.BLACK);
+		sell.setBounds(485, 600, 150, 30);
+		//sell.addActionListener(new RegisterUserAction(this, this.nameField, this.usernameField, this.passwordField));
+		this.add(sell);
+	}
 
 	@Override
 	public void addTextFields() { }
@@ -75,6 +152,7 @@ public class AvailableVehicleListScreen extends LargeView {
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 				final Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				component.setBackground(row % 2 == 0 ? Color.decode("#F0F0F0") : Color.WHITE);
+				component.setForeground(Color.BLACK);
 				return component;
 			}
 			
