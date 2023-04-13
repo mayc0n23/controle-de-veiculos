@@ -119,7 +119,20 @@ public class AvailableVehicleListScreen extends LargeView {
 		sell.setBackground(Color.BLACK);
 		sell.setForeground(Color.BLACK);
 		sell.setBounds(485, 600, 150, 30);
-		//sell.addActionListener(new RegisterUserAction(this, this.nameField, this.usernameField, this.passwordField));
+		sell.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (vehiclesTable.getSelectedRow() >= 0) {
+					int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+					new VehicleSalesScreen(vehicleId);
+					dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+				}
+			}
+			
+		});
 		this.add(sell);
 	}
 

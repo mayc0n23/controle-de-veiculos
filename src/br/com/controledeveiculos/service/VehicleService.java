@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.controledeveiculos.entity.Vehicle;
 import br.com.controledeveiculos.exception.FailedToDeleteVehicleException;
 import br.com.controledeveiculos.exception.FailedToRegisterVehicleException;
+import br.com.controledeveiculos.exception.FailedToUpdateVehicleException;
 import br.com.controledeveiculos.exception.VehicleNotFoundException;
 import br.com.controledeveiculos.repository.VehicleRepository;
 
@@ -29,12 +30,16 @@ public class VehicleService {
 	}
 	
 	public void delete(int id) throws FailedToDeleteVehicleException {
-		repository.delete(id);
+		this.repository.delete(id);
 	}
 	
 	public Vehicle searchById(int vehicleId) throws VehicleNotFoundException {
-		return repository.findById(vehicleId)
+		return this.repository.findById(vehicleId)
 				.orElseThrow(() -> new VehicleNotFoundException("Veículo não encontrado."));
+	}
+	
+	public void updateAvailableVehicle(Vehicle vehicle) throws FailedToUpdateVehicleException {
+		this.repository.updateAvailableVehicle(vehicle);
 	}
 	
 }

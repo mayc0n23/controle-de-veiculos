@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import br.com.controledeveiculos.actions.EditVehicleAction;
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Vehicle;
 import br.com.controledeveiculos.exception.VehicleNotFoundException;
@@ -35,6 +36,8 @@ public class EditVehicleScreen extends LargeView {
 	private JTextField sellerRgField;
 	private JTextField sellerPaymentDescriptionField;
 	
+	private JButton save;
+	
 	private Vehicle vehicle;
 	private VehicleService service;
 	
@@ -45,6 +48,7 @@ public class EditVehicleScreen extends LargeView {
 		try {
 			this.vehicle = this.service.searchById(vehicleId);
 			this.populateVehicleData();
+			this.addActionButton();
 		} catch (VehicleNotFoundException exception) {
 			JOptionPane.showMessageDialog(null, "Ocorreu uma falha ao tentar encontrar o veículo! Tente novamente.");
 			new AvailableVehicleListScreen();
@@ -177,14 +181,13 @@ public class EditVehicleScreen extends LargeView {
 
 	@Override
 	public void addButtons() {
-		JButton save = new JButton();
+		save = new JButton();
 		save.setText("Salvar");
 		save.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		save.setOpaque(true);
 		save.setBackground(Color.BLACK);
 		save.setForeground(Color.BLACK);
 		save.setBounds(290, 590, 200, 30);
-		//register.addActionListener(new RegisterVehicleAction(this));
 		this.add(save);
 	}
 
@@ -342,6 +345,11 @@ public class EditVehicleScreen extends LargeView {
 		this.sellerCpfField.setText(this.vehicle.getInCpf());
 		this.sellerRgField.setText(this.vehicle.getInRg());
 		this.sellerPaymentDescriptionField.setText(this.vehicle.getInPaymentDescription());
+	}
+	
+	private void addActionButton() {
+		EditVehicleAction action = new EditVehicleAction(this, vehicle.getId());
+		save.addActionListener(action);
 	}
 
 }
