@@ -2,11 +2,17 @@ package br.com.controledeveiculos.view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Vehicle;
@@ -31,11 +37,20 @@ public class VehicleSalesScreen extends LargeView {
 	private JTextField buyerRgField;
 	private JTextField buyerPaymentDescriptionField;
 	
+	private JFileChooser firstFileChooser;
+	private JFileChooser secondFileChooser;
+	private JFileChooser thirdFileChooser;
+	
+	private JLabel firstFileChooserLabel;
+	private JLabel secondFileChooserLabel;
+	private JLabel thirdFileChooserLabel;
+	
 	private Vehicle vehicle;
 	private VehicleService service;
 	
 	public VehicleSalesScreen(int vehicleId) {
 		this.setTitle(this.getTitle() + "Vender veículo");
+		this.addFileChooser();
 		this.setVisible(true);
 		this.service = new VehicleService();
 		try {
@@ -145,10 +160,177 @@ public class VehicleSalesScreen extends LargeView {
 		buyerRgLabel.setVisible(true);
 		buyerRgLabel.setBounds(430, 360, 150, 16);
 		this.add(buyerRgLabel);
+		
+		firstFileChooserLabel = new JLabel();
+		firstFileChooserLabel.setText("Nenhum arquivo selecionado...");
+		firstFileChooserLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		firstFileChooserLabel.setForeground(Color.BLACK);
+		firstFileChooserLabel.setVisible(true);
+		firstFileChooserLabel.setBounds(240, 437, 150, 16);
+		this.add(firstFileChooserLabel);
+		
+		secondFileChooserLabel = new JLabel();
+		secondFileChooserLabel.setText("Nenhum arquivo selecionado...");
+		secondFileChooserLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		secondFileChooserLabel.setForeground(Color.BLACK);
+		secondFileChooserLabel.setVisible(true);
+		secondFileChooserLabel.setBounds(240, 487, 150, 16);
+		this.add(secondFileChooserLabel);
+		
+		thirdFileChooserLabel = new JLabel();
+		thirdFileChooserLabel.setText("Nenhum arquivo selecionado...");
+		thirdFileChooserLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		thirdFileChooserLabel.setForeground(Color.BLACK);
+		thirdFileChooserLabel.setVisible(true);
+		thirdFileChooserLabel.setBounds(240, 537, 150, 16);
+		this.add(thirdFileChooserLabel);
 	}
 
 	@Override
-	public void addButtons() { }
+	public void addButtons() {
+		JButton uploadFirstFile = new JButton();
+		uploadFirstFile.setText("Subir arquivo 1");
+		uploadFirstFile.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		uploadFirstFile.setOpaque(true);
+		uploadFirstFile.setBackground(Color.BLACK);
+		uploadFirstFile.setForeground(Color.BLACK);
+		uploadFirstFile.setBounds(20, 430, 200, 30);
+		uploadFirstFile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int response = firstFileChooser.showOpenDialog(null);
+				
+				if (JFileChooser.APPROVE_OPTION == response) {
+					File file = firstFileChooser.getSelectedFile();
+					firstFileChooserLabel.setText(file.getName());
+				}
+			}
+			
+		});
+		this.add(uploadFirstFile);
+		
+		JButton deleteFirstFile = new JButton();
+		deleteFirstFile.setText("Remover arquivo 1");
+		deleteFirstFile.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		deleteFirstFile.setOpaque(true);
+		deleteFirstFile.setBackground(Color.BLACK);
+		deleteFirstFile.setForeground(Color.RED);
+		deleteFirstFile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (firstFileChooser.getSelectedFile() != null) {
+					firstFileChooser.setSelectedFile(null);
+					firstFileChooserLabel.setText("Nenhum arquivo selecionado...");
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum arquivo selecionado.");
+				}
+			}
+			
+		});
+		deleteFirstFile.setBounds(570, 430, 200, 30);
+		
+		this.add(deleteFirstFile);
+		
+		JButton uploadSecondFile = new JButton();
+		uploadSecondFile.setText("Subir arquivo 2");
+		uploadSecondFile.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		uploadSecondFile.setOpaque(true);
+		uploadSecondFile.setBackground(Color.BLACK);
+		uploadSecondFile.setForeground(Color.BLACK);
+		uploadSecondFile.setBounds(20, 480, 200, 30);
+		uploadSecondFile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int response = secondFileChooser.showOpenDialog(null);
+				
+				if (JFileChooser.APPROVE_OPTION == response) {
+					File file = secondFileChooser.getSelectedFile();
+					secondFileChooserLabel.setText(file.getName());
+				}
+			}
+			
+		});
+		this.add(uploadSecondFile);
+		
+		JButton deleteSecondFile = new JButton();
+		deleteSecondFile.setText("Remover arquivo 2");
+		deleteSecondFile.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		deleteSecondFile.setOpaque(true);
+		deleteSecondFile.setBackground(Color.BLACK);
+		deleteSecondFile.setForeground(Color.RED);
+		deleteSecondFile.setBounds(570, 480, 200, 30);
+		deleteSecondFile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (secondFileChooser.getSelectedFile() != null) {
+					secondFileChooser.setSelectedFile(null);
+					secondFileChooserLabel.setText("Nenhum arquivo selecionado...");
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum arquivo selecionado.");
+				}
+			}
+			
+		});
+		this.add(deleteSecondFile);
+		
+		JButton uploadThirdFile = new JButton();
+		uploadThirdFile.setText("Subir arquivo 3");
+		uploadThirdFile.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		uploadThirdFile.setOpaque(true);
+		uploadThirdFile.setBackground(Color.BLACK);
+		uploadThirdFile.setForeground(Color.BLACK);
+		uploadThirdFile.setBounds(20, 530, 200, 30);
+		uploadThirdFile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int response = thirdFileChooser.showOpenDialog(null);
+				
+				if (JFileChooser.APPROVE_OPTION == response) {
+					File file = thirdFileChooser.getSelectedFile();
+					thirdFileChooserLabel.setText(file.getName());
+				}
+			}
+			
+		});
+		this.add(uploadThirdFile);
+		
+		JButton deleteThirdFile = new JButton();
+		deleteThirdFile.setText("Remover arquivo 3");
+		deleteThirdFile.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		deleteThirdFile.setOpaque(true);
+		deleteThirdFile.setBackground(Color.BLACK);
+		deleteThirdFile.setForeground(Color.RED);
+		deleteThirdFile.setBounds(570, 530, 200, 30);
+		deleteThirdFile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (thirdFileChooser.getSelectedFile() != null) {
+					thirdFileChooser.setSelectedFile(null);
+					thirdFileChooserLabel.setText("Nenhum arquivo selecionado...");
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum arquivo selecionado.");
+				}
+			}
+			
+		});
+		this.add(deleteThirdFile);
+		
+		JButton save = new JButton();
+		save.setText("Salvar");
+		save.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		save.setOpaque(true);
+		save.setBackground(Color.BLACK);
+		save.setForeground(Color.BLACK);
+		save.setBounds(300, 590, 200, 30);
+		this.add(save);
+		
+	}
 
 	@Override
 	public void addTextFields() { 
@@ -221,6 +403,22 @@ public class VehicleSalesScreen extends LargeView {
 		vehiclePanel.setBounds(20, 194, 755, 1);
 		vehiclePanel.setBackground(Color.GRAY);
 		this.add(vehiclePanel);
+	}
+	
+	private void addFileChooser() {
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF, PNG, JPG, JPEG, DOCX, TXT", "pdf", "png", "jpg", "jpeg", "docx", "txt");
+		
+		firstFileChooser = new JFileChooser();
+		firstFileChooser.setAcceptAllFileFilterUsed(false);
+		firstFileChooser.addChoosableFileFilter(filter);
+		
+		secondFileChooser = new JFileChooser();
+		secondFileChooser.setAcceptAllFileFilterUsed(false);
+		secondFileChooser.addChoosableFileFilter(filter);
+		
+		thirdFileChooser = new JFileChooser();
+		thirdFileChooser.setAcceptAllFileFilterUsed(false);
+		thirdFileChooser.addChoosableFileFilter(filter);
 	}
 	
 	private void populateData() {
