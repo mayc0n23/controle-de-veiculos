@@ -42,4 +42,8 @@ public class VehicleService {
 		this.repository.updateAvailableVehicle(vehicle);
 	}
 	
+	public void sellVehicle(Vehicle vehicle) throws FailedToUpdateVehicleException {
+		this.repository.sellVehicle(vehicle);
+	}
+	
 }

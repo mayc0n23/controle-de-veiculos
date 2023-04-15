@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import br.com.controledeveiculos.actions.SellVehicleAction;
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Vehicle;
 import br.com.controledeveiculos.exception.VehicleNotFoundException;
@@ -40,6 +41,7 @@ public class VehicleSalesScreen extends LargeView {
 	private JFileChooser firstFileChooser;
 	private JFileChooser secondFileChooser;
 	private JFileChooser thirdFileChooser;
+	private JButton save;
 	
 	private JLabel firstFileChooserLabel;
 	private JLabel secondFileChooserLabel;
@@ -50,12 +52,13 @@ public class VehicleSalesScreen extends LargeView {
 	
 	public VehicleSalesScreen(int vehicleId) {
 		this.setTitle(this.getTitle() + "Vender veículo");
-		this.addFileChooser();
 		this.setVisible(true);
 		this.service = new VehicleService();
 		try {
 			this.vehicle = this.service.searchById(vehicleId);
 			this.populateData();
+			this.addFileChooser();
+			save.addActionListener(new SellVehicleAction(this, vehicle));
 		} catch (VehicleNotFoundException exception) {
 			JOptionPane.showMessageDialog(null, "Ocorreu uma falha ao tentar encontrar o veículo! Tente novamente.");
 			new AvailableVehicleListScreen();
@@ -321,13 +324,14 @@ public class VehicleSalesScreen extends LargeView {
 		});
 		this.add(deleteThirdFile);
 		
-		JButton save = new JButton();
+		save = new JButton();
 		save.setText("Salvar");
 		save.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		save.setOpaque(true);
 		save.setBackground(Color.BLACK);
 		save.setForeground(Color.BLACK);
 		save.setBounds(300, 590, 200, 30);
+		save.addActionListener(new SellVehicleAction(this, vehicle));
 		this.add(save);
 		
 	}
@@ -426,6 +430,42 @@ public class VehicleSalesScreen extends LargeView {
 		this.plateField.setText(this.vehicle.getPlate());
 		this.renavamField.setText(this.vehicle.getRenavam());
 		this.priceField.setText(this.vehicle.getSalePrice());
+	}
+
+	public JTextField getBuyerNameField() {
+		return buyerNameField;
+	}
+
+	public JTextField getBuyerAddressField() {
+		return buyerAddressField;
+	}
+
+	public JTextField getBuyerPhoneField() {
+		return buyerPhoneField;
+	}
+
+	public JTextField getBuyerCpfField() {
+		return buyerCpfField;
+	}
+
+	public JTextField getBuyerRgField() {
+		return buyerRgField;
+	}
+
+	public JTextField getBuyerPaymentDescriptionField() {
+		return buyerPaymentDescriptionField;
+	}
+
+	public JFileChooser getFirstFileChooser() {
+		return firstFileChooser;
+	}
+
+	public JFileChooser getSecondFileChooser() {
+		return secondFileChooser;
+	}
+
+	public JFileChooser getThirdFileChooser() {
+		return thirdFileChooser;
 	}
 
 }

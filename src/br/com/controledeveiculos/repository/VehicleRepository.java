@@ -210,4 +210,26 @@ public class VehicleRepository {
 		}
 	}
 	
+	public void sellVehicle(Vehicle vehicle) throws FailedToUpdateVehicleException {
+		connection = MySQLConnection.getInstance();
+		String query = "UPDATE vehicle SET out_name = ?, out_address = ?, out_phone = ?, out_payment_description = ?, out_rg = ?, out_cpf = ? WHERE id = ?";
+		try {
+			connection.connect();
+			statement = connection.getConnection().prepareStatement(query);
+			statement.setString(1, vehicle.getOutName());
+			statement.setString(2, vehicle.getOutAddress());
+			statement.setString(3, vehicle.getOutPhone());
+			statement.setString(4, vehicle.getOutPaymentDescription());
+			statement.setString(5, vehicle.getOutRg());
+			statement.setString(6, vehicle.getOutCpf());
+			statement.setInt(7, vehicle.getId());
+			statement.execute();
+		} catch (Exception exception) {
+			Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, null, exception);
+			throw new FailedToUpdateVehicleException("Falha ao atualizar os dados do veículo! Tente novamente.");
+		} finally {
+			connection.disconnect();
+		}
+	}
+	
 }
