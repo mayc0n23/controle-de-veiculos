@@ -63,7 +63,7 @@ public class AvailableVehicleListScreen extends LargeView {
 			public void actionPerformed(ActionEvent e) {
 				if (vehiclesTable.getSelectedRow() >= 0) {
 					int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
-					new EditVehicleScreen(vehicleId);
+					new EditAvailableVehicleScreen(vehicleId);
 					dispose();
 				} else {
 					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
@@ -157,7 +157,7 @@ public class AvailableVehicleListScreen extends LargeView {
 		vehiclesTable = new JTable(vehicleTableModel);
 		vehiclesTable.getTableHeader().setReorderingAllowed(false);
 		vehiclesTable.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-		vehiclesTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+		/*vehiclesTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 
 			private static final long serialVersionUID = 3435114482235721602L;
 
@@ -169,7 +169,7 @@ public class AvailableVehicleListScreen extends LargeView {
 				return component;
 			}
 			
-		});
+		});*/
 		
 		String[] vehicleColumns = {"ID", "TIPO", "DESCRIÇÃO", "PLACA", "CHASSI", "RENAVAM", "VALOR"};
 		for(String column: vehicleColumns) {

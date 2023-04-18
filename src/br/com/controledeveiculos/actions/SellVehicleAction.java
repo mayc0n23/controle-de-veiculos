@@ -8,8 +8,11 @@ import java.nio.file.Files;
 
 import javax.swing.JOptionPane;
 
+import br.com.controledeveiculos.entity.Archive;
 import br.com.controledeveiculos.entity.Vehicle;
+import br.com.controledeveiculos.exception.FailedToSaveFileException;
 import br.com.controledeveiculos.exception.FailedToUpdateVehicleException;
+import br.com.controledeveiculos.service.ArchiveService;
 import br.com.controledeveiculos.service.VehicleService;
 import br.com.controledeveiculos.view.VehicleSalesScreen;
 import br.com.controledeveiculos.view.VehicleSoldListScreen;
@@ -17,6 +20,8 @@ import br.com.controledeveiculos.view.VehicleSoldListScreen;
 public class SellVehicleAction implements ActionListener {
 	
 	private VehicleService vehicleService;
+	
+	private ArchiveService archiveService;
 	
 	private VehicleSalesScreen screen;
 	
@@ -26,6 +31,7 @@ public class SellVehicleAction implements ActionListener {
 		this.screen = screen;
 		this.vehicle = vehicle;
 		this.vehicleService = new VehicleService();
+		this.archiveService = new ArchiveService();
 	}
 
 	@Override
@@ -35,7 +41,7 @@ public class SellVehicleAction implements ActionListener {
 			try {
 				this.vehicleService.sellVehicle(vehicle);
 				if (hasFiles()) {
-					
+					saveFiles();
 				}
 				JOptionPane.showMessageDialog(null, "Veículo editado com sucesso!");
 				new VehicleSoldListScreen();
@@ -76,8 +82,13 @@ public class SellVehicleAction implements ActionListener {
 			File file = screen.getFirstFileChooser().getSelectedFile();
 			try {
 				byte[] fileContent = Files.readAllBytes(file.toPath());
-			} catch (IOException e) {
+				Archive archive = new Archive();
+				archive.setVehicleId(vehicle.getId());
+				archive.setArchive(fileContent);
+				this.archiveService.saveArchive(archive);
+			} catch (IOException | FailedToSaveFileException e) {
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
 			}
 		}
 		
@@ -85,8 +96,13 @@ public class SellVehicleAction implements ActionListener {
 			File file = screen.getSecondFileChooser().getSelectedFile();
 			try {
 				byte[] fileContent = Files.readAllBytes(file.toPath());
-			} catch (IOException e) {
+				Archive archive = new Archive();
+				archive.setVehicleId(vehicle.getId());
+				archive.setArchive(fileContent);
+				this.archiveService.saveArchive(archive);
+			} catch (IOException | FailedToSaveFileException e) {
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
 			}
 		}
 		
@@ -94,8 +110,13 @@ public class SellVehicleAction implements ActionListener {
 			File file = screen.getThirdFileChooser().getSelectedFile();
 			try {
 				byte[] fileContent = Files.readAllBytes(file.toPath());
-			} catch (IOException e) {
+				Archive archive = new Archive();
+				archive.setVehicleId(vehicle.getId());
+				archive.setArchive(fileContent);
+				this.archiveService.saveArchive(archive);
+			} catch (IOException | FailedToSaveFileException e) {
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
 			}
 		}
 	}

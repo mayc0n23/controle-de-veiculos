@@ -9,17 +9,17 @@ import br.com.controledeveiculos.entity.Vehicle;
 import br.com.controledeveiculos.exception.FailedToUpdateVehicleException;
 import br.com.controledeveiculos.service.VehicleService;
 import br.com.controledeveiculos.view.AvailableVehicleListScreen;
-import br.com.controledeveiculos.view.EditVehicleScreen;
+import br.com.controledeveiculos.view.EditAvailableVehicleScreen;
 
-public class EditVehicleAction implements ActionListener {
+public class EditAvailableVehicleAction implements ActionListener {
 	
 	private VehicleService vehicleService;
 	
-	private EditVehicleScreen screen;
+	private EditAvailableVehicleScreen screen;
 	
 	private int vehicleId;
 	
-	public EditVehicleAction(EditVehicleScreen screen, int vehicleId) {
+	public EditAvailableVehicleAction(EditAvailableVehicleScreen screen, int vehicleId) {
 		this.screen = screen;
 		this.vehicleService = new VehicleService();
 		this.vehicleId = vehicleId;

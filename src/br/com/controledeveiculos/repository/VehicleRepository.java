@@ -117,7 +117,7 @@ public class VehicleRepository {
 			statement.execute();
 			return true;
 		} catch (Exception exception) {
-			Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, null, exception);
+			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
 			throw new FailedToRegisterVehicleException("Falha ao cadastrar o veículo! Tente novamente.");
 		} finally {
 			connection.disconnect();
@@ -134,7 +134,7 @@ public class VehicleRepository {
 			statement.execute();
 			return true;
 		} catch (Exception exception) {
-			Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, null, exception);
+			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
 			throw new FailedToDeleteVehicleException("Falha ao excluir o veículo! Tente novamente.");
 		} finally {
 			connection.disconnect();
@@ -203,7 +203,7 @@ public class VehicleRepository {
 			statement.setInt(14, vehicle.getId());
 			statement.execute();
 		} catch (Exception exception) {
-			Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, null, exception);
+			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
 			throw new FailedToUpdateVehicleException("Falha ao atualizar os dados do veículo! Tente novamente.");
 		} finally {
 			connection.disconnect();
@@ -225,7 +225,7 @@ public class VehicleRepository {
 			statement.setInt(7, vehicle.getId());
 			statement.execute();
 		} catch (Exception exception) {
-			Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, null, exception);
+			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
 			throw new FailedToUpdateVehicleException("Falha ao atualizar os dados do veículo! Tente novamente.");
 		} finally {
 			connection.disconnect();

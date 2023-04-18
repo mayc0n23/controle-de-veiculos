@@ -2,15 +2,22 @@ package br.com.controledeveiculos.view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Vehicle;
+import br.com.controledeveiculos.exception.FailedToDeleteFileException;
+import br.com.controledeveiculos.exception.FailedToDeleteVehicleException;
+import br.com.controledeveiculos.service.ArchiveService;
 import br.com.controledeveiculos.service.UserService;
 import br.com.controledeveiculos.service.VehicleService;
 import br.com.controledeveiculos.view.template.LargeView;
@@ -19,7 +26,8 @@ public class VehicleSoldListScreen extends LargeView {
 	
 	private static final long serialVersionUID = 5396333298175805263L;
 	
-	private VehicleService service;
+	private ArchiveService archiveService;
+	private VehicleService vehicleService;
 	private List<Vehicle> vehicles;
 	
 	private DefaultTableModel vehicleTableModel;
@@ -42,15 +50,80 @@ public class VehicleSoldListScreen extends LargeView {
 	}
 
 	@Override
-	public void addButtons() { }
+	public void addButtons() { 
+		archiveService = new ArchiveService();
+		
+		JButton edit = new JButton();
+		edit.setText("Editar");
+		edit.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		edit.setOpaque(true);
+		edit.setBackground(Color.BLACK);
+		edit.setForeground(Color.BLACK);
+		edit.setBounds(240, 600, 150, 30);
+		edit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (vehiclesTable.getSelectedRow() >= 0) {
+					int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+					new EditSoldVehicleScreen(vehicleId);
+					dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+				}
+			}
+			
+		});
+		this.add(edit);
+		
+		JButton delete = new JButton();
+		delete.setText("Excluir");
+		delete.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		delete.setOpaque(true);
+		delete.setBackground(Color.BLACK);
+		delete.setForeground(Color.BLACK);
+		delete.setBounds(420, 600, 150, 30);
+		delete.addActionListener(new ActionListener() {
+	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (vehiclesTable.getSelectedRow() >= 0) {
+					String vehicleDescription = (String) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 2);
+					int confirmDialogResponse = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o veículo '" + vehicleDescription + "'?", "Excluir veículo", 0);
+					if (confirmDialogResponse == 0) {
+						deleteVehicleFromDatabase();
+						deleteVehicleFromTable();
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+				}
+			}
+			
+			private void deleteVehicleFromDatabase() {
+				int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+				try {
+					archiveService.deleteFileIfExist(vehicleId);
+					vehicleService.delete(vehicleId);
+				} catch (FailedToDeleteVehicleException | FailedToDeleteFileException exception) {
+					JOptionPane.showMessageDialog(null, exception.getMessage());
+				}
+			}
+			
+			private void deleteVehicleFromTable() {
+				vehicleTableModel.removeRow(vehiclesTable.getSelectedRow());
+			}
+			
+		});
+		this.add(delete);
+	}
 
 	@Override
 	public void addTextFields() { }
 
 	@Override
 	public void addTables() {
-		this.service = new VehicleService();
-		this.vehicles = this.service.listOfVehiclesSold();
+		this.vehicleService = new VehicleService();
+		this.vehicles = this.vehicleService.listOfVehiclesSold();
 		vehicleTableModel = new DefaultTableModel() {
 
 			private static final long serialVersionUID = 8972832026170338243L;

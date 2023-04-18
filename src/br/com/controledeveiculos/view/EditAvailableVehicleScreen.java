@@ -11,14 +11,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import br.com.controledeveiculos.actions.EditVehicleAction;
+import br.com.controledeveiculos.actions.EditAvailableVehicleAction;
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Vehicle;
 import br.com.controledeveiculos.exception.VehicleNotFoundException;
 import br.com.controledeveiculos.service.VehicleService;
 import br.com.controledeveiculos.view.template.LargeView;
 
-public class EditVehicleScreen extends LargeView {
+public class EditAvailableVehicleScreen extends LargeView {
 	
 	private static final long serialVersionUID = 5096399138642382014L;
 	
@@ -41,7 +41,7 @@ public class EditVehicleScreen extends LargeView {
 	private Vehicle vehicle;
 	private VehicleService service;
 	
-	public EditVehicleScreen(int vehicleId) {
+	public EditAvailableVehicleScreen(int vehicleId) {
 		this.setTitle(this.getTitle() + "Editar veículo");
 		this.setVisible(true);
 		this.service = new VehicleService();
@@ -348,7 +348,7 @@ public class EditVehicleScreen extends LargeView {
 	}
 	
 	private void addActionButton() {
-		EditVehicleAction action = new EditVehicleAction(this, vehicle.getId());
+		EditAvailableVehicleAction action = new EditAvailableVehicleAction(this, vehicle.getId());
 		save.addActionListener(action);
 	}
 
