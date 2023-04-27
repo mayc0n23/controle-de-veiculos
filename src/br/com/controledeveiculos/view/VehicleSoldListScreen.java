@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import br.com.controledeveiculos.components.MenuBar;
+import br.com.controledeveiculos.entity.Archive;
 import br.com.controledeveiculos.entity.Vehicle;
 import br.com.controledeveiculos.exception.FailedToDeleteFileException;
 import br.com.controledeveiculos.exception.FailedToDeleteVehicleException;
@@ -59,7 +60,7 @@ public class VehicleSoldListScreen extends LargeView {
 		edit.setOpaque(true);
 		edit.setBackground(Color.BLACK);
 		edit.setForeground(Color.BLACK);
-		edit.setBounds(240, 600, 150, 30);
+		edit.setBounds(125, 600, 150, 30);
 		edit.addActionListener(new ActionListener() {
 			
 			@Override
@@ -82,7 +83,7 @@ public class VehicleSoldListScreen extends LargeView {
 		delete.setOpaque(true);
 		delete.setBackground(Color.BLACK);
 		delete.setForeground(Color.BLACK);
-		delete.setBounds(420, 600, 150, 30);
+		delete.setBounds(305, 600, 150, 30);
 		delete.addActionListener(new ActionListener() {
 	
 			@Override
@@ -115,6 +116,33 @@ public class VehicleSoldListScreen extends LargeView {
 			
 		});
 		this.add(delete);
+		
+		JButton viewFiles = new JButton();
+		viewFiles.setText("Ver arquivos");
+		viewFiles.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		viewFiles.setOpaque(true);
+		viewFiles.setBackground(Color.BLACK);
+		viewFiles.setForeground(Color.BLACK);
+		viewFiles.setBounds(485, 600, 150, 30);
+		viewFiles.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (vehiclesTable.getSelectedRow() >= 0) {
+					int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+					List<Archive> archives = archiveService.searchByVehicleId(vehicleId);
+					if (!archives.isEmpty()) {
+						archiveService.openFiles(archives);
+					} else {
+						JOptionPane.showMessageDialog(null, "O veículo selecionado não possui nenhum arquivo.");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+				}
+			}
+			
+		});
+		this.add(viewFiles);
 	}
 
 	@Override

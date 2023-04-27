@@ -6,6 +6,8 @@ public class Archive {
 	
 	private int vehicleId;
 	
+	private String filename;
+	
 	private byte[] archive;
 
 	public int getId() {
@@ -30,6 +32,14 @@ public class Archive {
 
 	public void setArchive(byte[] archive) {
 		this.archive = archive;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 	
 }

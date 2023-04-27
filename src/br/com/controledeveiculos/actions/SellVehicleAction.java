@@ -84,6 +84,7 @@ public class SellVehicleAction implements ActionListener {
 				byte[] fileContent = Files.readAllBytes(file.toPath());
 				Archive archive = new Archive();
 				archive.setVehicleId(vehicle.getId());
+				archive.setFilename(file.getName());
 				archive.setArchive(fileContent);
 				this.archiveService.saveArchive(archive);
 			} catch (IOException | FailedToSaveFileException e) {
@@ -98,6 +99,7 @@ public class SellVehicleAction implements ActionListener {
 				byte[] fileContent = Files.readAllBytes(file.toPath());
 				Archive archive = new Archive();
 				archive.setVehicleId(vehicle.getId());
+				archive.setFilename(file.getName());
 				archive.setArchive(fileContent);
 				this.archiveService.saveArchive(archive);
 			} catch (IOException | FailedToSaveFileException e) {
@@ -112,6 +114,7 @@ public class SellVehicleAction implements ActionListener {
 				byte[] fileContent = Files.readAllBytes(file.toPath());
 				Archive archive = new Archive();
 				archive.setVehicleId(vehicle.getId());
+				archive.setFilename(file.getName());
 				archive.setArchive(fileContent);
 				this.archiveService.saveArchive(archive);
 			} catch (IOException | FailedToSaveFileException e) {
