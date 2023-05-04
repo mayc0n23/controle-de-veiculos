@@ -33,7 +33,7 @@ public class ArchiveService {
 	
 	public void openFiles(List<Archive> archives) {
 		archives.forEach(archive -> {
-			File file = new File(archive.getFilename());
+			File file = new File("files/" + archive.getFilename());
 			try {
 				FileOutputStream outputStream = new FileOutputStream(file);
 				outputStream.write(archive.getArchive());

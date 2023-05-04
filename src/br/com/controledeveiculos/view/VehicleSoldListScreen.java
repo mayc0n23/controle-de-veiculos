@@ -55,12 +55,12 @@ public class VehicleSoldListScreen extends LargeView {
 		archiveService = new ArchiveService();
 		
 		JButton edit = new JButton();
-		edit.setText("Editar");
-		edit.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		edit.setText("Editar veículo");
+		edit.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		edit.setOpaque(true);
 		edit.setBackground(Color.BLACK);
 		edit.setForeground(Color.BLACK);
-		edit.setBounds(125, 600, 150, 30);
+		edit.setBounds(55, 600, 150, 30);
 		edit.addActionListener(new ActionListener() {
 			
 			@Override
@@ -83,7 +83,7 @@ public class VehicleSoldListScreen extends LargeView {
 		delete.setOpaque(true);
 		delete.setBackground(Color.BLACK);
 		delete.setForeground(Color.BLACK);
-		delete.setBounds(305, 600, 150, 30);
+		delete.setBounds(235, 600, 150, 30);
 		delete.addActionListener(new ActionListener() {
 	
 			@Override
@@ -123,7 +123,7 @@ public class VehicleSoldListScreen extends LargeView {
 		viewFiles.setOpaque(true);
 		viewFiles.setBackground(Color.BLACK);
 		viewFiles.setForeground(Color.BLACK);
-		viewFiles.setBounds(485, 600, 150, 30);
+		viewFiles.setBounds(415, 600, 150, 30);
 		viewFiles.addActionListener(new ActionListener() {
 			
 			@Override
@@ -143,6 +143,29 @@ public class VehicleSoldListScreen extends LargeView {
 			
 		});
 		this.add(viewFiles);
+		
+		JButton editSale = new JButton();
+		editSale.setText("Editar venda");
+		editSale.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		editSale.setOpaque(true);
+		editSale.setBackground(Color.BLACK);
+		editSale.setForeground(Color.BLACK);
+		editSale.setBounds(595, 600, 150, 30);
+		editSale.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (vehiclesTable.getSelectedRow() >= 0) {
+					int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+					new EditSaleScreen(vehicleId);
+					dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+				}
+			}
+			
+		});
+		this.add(editSale);
 	}
 
 	@Override

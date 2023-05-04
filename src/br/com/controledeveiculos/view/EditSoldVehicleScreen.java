@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import br.com.controledeveiculos.actions.EditSoldVehicleAction;
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Vehicle;
 import br.com.controledeveiculos.exception.VehicleNotFoundException;
@@ -47,7 +48,7 @@ public class EditSoldVehicleScreen extends LargeView {
 		try {
 			this.vehicle = this.service.searchById(vehicleId);
 			this.populateVehicleData();
-			//this.addActionButton();
+			this.addActionButton();
 		} catch (VehicleNotFoundException exception) {
 			JOptionPane.showMessageDialog(null, "Ocorreu uma falha ao tentar encontrar o veículo! Tente novamente.");
 			new AvailableVehicleListScreen();
@@ -342,6 +343,11 @@ public class EditSoldVehicleScreen extends LargeView {
 		this.sellerCpfField.setText(this.vehicle.getInCpf());
 		this.sellerRgField.setText(this.vehicle.getInRg());
 		this.sellerPaymentDescriptionField.setText(this.vehicle.getInPaymentDescription());
+	}
+	
+	private void addActionButton() {
+		EditSoldVehicleAction action = new EditSoldVehicleAction(this, vehicle.getId());
+		save.addActionListener(action);
 	}
 	
 }
