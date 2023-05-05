@@ -5,13 +5,17 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Archive;
@@ -33,10 +37,22 @@ public class VehicleSoldListScreen extends LargeView {
 	
 	private DefaultTableModel vehicleTableModel;
 	private JTable vehiclesTable;
+	private JTextField plateFilterText;
+	private JButton filter;
 	
 	public VehicleSoldListScreen() {
 		this.setTitle(this.getTitle() + "Lista de veículos vendidos");
 		this.setVisible(true);
+		filter.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(vehicleTableModel);
+				trs.setRowFilter(RowFilter.regexFilter("(?i)" + plateFilterText.getText().trim(), 3));
+				vehiclesTable.setRowSorter(trs);
+			}
+			
+		});
 	}
 
 	@Override
@@ -48,6 +64,14 @@ public class VehicleSoldListScreen extends LargeView {
 		userLoggedMessage.setVisible(true);
 		userLoggedMessage.setBounds(20, 18, 200, 18);
 		this.add(userLoggedMessage);
+		
+		JLabel plateLabel = new JLabel();
+		plateLabel.setText("Placa:");
+		plateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		plateLabel.setForeground(Color.BLACK);
+		plateLabel.setVisible(true);
+		plateLabel.setBounds(40, 65, 200, 18);
+		this.add(plateLabel);
 	}
 
 	@Override
@@ -63,11 +87,20 @@ public class VehicleSoldListScreen extends LargeView {
 		edit.setBounds(55, 600, 150, 30);
 		edit.addActionListener(new ActionListener() {
 			
+			private int getVehicleId() {
+				int selectedRow = vehiclesTable.getSelectedRow();
+				int modelRow = vehiclesTable.convertRowIndexToModel(selectedRow);
+				Vector<Vector<Object>> dataVector = vehicleTableModel.getDataVector();
+				Vector<Object> rowDataVector = dataVector.elementAt(modelRow);
+				Object[] rowData = rowDataVector.toArray(new Object[rowDataVector.size()]);
+				int vehicleId = (int) rowData[0];
+				return vehicleId;
+			}
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (vehiclesTable.getSelectedRow() >= 0) {
-					int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
-					new EditSoldVehicleScreen(vehicleId);
+					new EditSoldVehicleScreen(getVehicleId());
 					dispose();
 				} else {
 					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
@@ -89,7 +122,7 @@ public class VehicleSoldListScreen extends LargeView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (vehiclesTable.getSelectedRow() >= 0) {
-					String vehicleDescription = (String) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 2);
+					String vehicleDescription = getVehicleDescription();
 					int confirmDialogResponse = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o veículo '" + vehicleDescription + "'?", "Excluir veículo", 0);
 					if (confirmDialogResponse == 0) {
 						deleteVehicleFromDatabase();
@@ -100,8 +133,28 @@ public class VehicleSoldListScreen extends LargeView {
 				}
 			}
 			
+			private int getVehicleId() {
+				int selectedRow = vehiclesTable.getSelectedRow();
+				int modelRow = vehiclesTable.convertRowIndexToModel(selectedRow);
+				Vector<Vector<Object>> dataVector = vehicleTableModel.getDataVector();
+				Vector<Object> rowDataVector = dataVector.elementAt(modelRow);
+				Object[] rowData = rowDataVector.toArray(new Object[rowDataVector.size()]);
+				int vehicleId = (int) rowData[0];
+				return vehicleId;
+			}
+			
+			private String getVehicleDescription() {
+				int selectedRow = vehiclesTable.getSelectedRow();
+				int modelRow = vehiclesTable.convertRowIndexToModel(selectedRow);
+				Vector<Vector<Object>> dataVector = vehicleTableModel.getDataVector();
+				Vector<Object> rowDataVector = dataVector.elementAt(modelRow);
+				Object[] rowData = rowDataVector.toArray(new Object[rowDataVector.size()]);
+				String description = (String) rowData[2];
+				return description;
+			}
+			
 			private void deleteVehicleFromDatabase() {
-				int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+				int vehicleId = getVehicleId();
 				try {
 					archiveService.deleteFileIfExist(vehicleId);
 					vehicleService.delete(vehicleId);
@@ -111,7 +164,7 @@ public class VehicleSoldListScreen extends LargeView {
 			}
 			
 			private void deleteVehicleFromTable() {
-				vehicleTableModel.removeRow(vehiclesTable.getSelectedRow());
+				vehicleTableModel.removeRow(vehiclesTable.convertRowIndexToModel(vehiclesTable.getSelectedRow()));
 			}
 			
 		});
@@ -129,7 +182,7 @@ public class VehicleSoldListScreen extends LargeView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (vehiclesTable.getSelectedRow() >= 0) {
-					int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+					int vehicleId = getVehicleId();
 					List<Archive> archives = archiveService.searchByVehicleId(vehicleId);
 					if (!archives.isEmpty()) {
 						archiveService.openFiles(archives);
@@ -139,6 +192,16 @@ public class VehicleSoldListScreen extends LargeView {
 				} else {
 					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
 				}
+			}
+			
+			private int getVehicleId() {
+				int selectedRow = vehiclesTable.getSelectedRow();
+				int modelRow = vehiclesTable.convertRowIndexToModel(selectedRow);
+				Vector<Vector<Object>> dataVector = vehicleTableModel.getDataVector();
+				Vector<Object> rowDataVector = dataVector.elementAt(modelRow);
+				Object[] rowData = rowDataVector.toArray(new Object[rowDataVector.size()]);
+				int vehicleId = (int) rowData[0];
+				return vehicleId;
 			}
 			
 		});
@@ -156,7 +219,7 @@ public class VehicleSoldListScreen extends LargeView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (vehiclesTable.getSelectedRow() >= 0) {
-					int vehicleId = (int) vehicleTableModel.getValueAt(vehiclesTable.getSelectedRow(), 0);
+					int vehicleId = getVehicleId();
 					new EditSaleScreen(vehicleId);
 					dispose();
 				} else {
@@ -164,12 +227,36 @@ public class VehicleSoldListScreen extends LargeView {
 				}
 			}
 			
+			private int getVehicleId() {
+				int selectedRow = vehiclesTable.getSelectedRow();
+				int modelRow = vehiclesTable.convertRowIndexToModel(selectedRow);
+				Vector<Vector<Object>> dataVector = vehicleTableModel.getDataVector();
+				Vector<Object> rowDataVector = dataVector.elementAt(modelRow);
+				Object[] rowData = rowDataVector.toArray(new Object[rowDataVector.size()]);
+				int vehicleId = (int) rowData[0];
+				return vehicleId;
+			}
+			
 		});
 		this.add(editSale);
+		
+		filter = new JButton();
+		filter.setText("Buscar");
+		filter.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		filter.setOpaque(true);
+		filter.setBackground(Color.BLACK);
+		filter.setForeground(Color.BLACK);
+		filter.setBounds(340, 62, 100, 24);
+		this.add(filter);
 	}
 
 	@Override
-	public void addTextFields() { }
+	public void addTextFields() {
+		plateFilterText = new JTextField();
+		plateFilterText.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		plateFilterText.setBounds(80, 62, 250, 24);
+		this.add(plateFilterText);
+	}
 
 	@Override
 	public void addTables() {
@@ -199,7 +286,7 @@ public class VehicleSoldListScreen extends LargeView {
 			vehicleTableModel.addRow(data);
 		}
 		JScrollPane vehicleContainer = new JScrollPane(vehiclesTable);
-		vehicleContainer.setBounds(20, 60, 755, 520);
+		vehicleContainer.setBounds(20, 90, 755, 490);
 		add(vehicleContainer);
 	}
 
