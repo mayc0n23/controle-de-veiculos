@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import br.com.controledeveiculos.entity.User;
 import br.com.controledeveiculos.exception.FailedToFetchUserException;
 import br.com.controledeveiculos.exception.FailedToRegisterUserException;
+import br.com.controledeveiculos.exception.FailedToUpdateUserException;
 
 public class UserRepository {
 	
@@ -87,6 +88,25 @@ public class UserRepository {
 			connection.disconnect();
 		}
 		return response;
+	}
+	
+	public void update(User user) throws FailedToUpdateUserException {
+		connection = MySQLConnection.getInstance();
+		String query = "UPDATE user SET name = ?, username = ?, password = ? WHERE id = ?";
+		try {
+			connection.connect();
+			statement = connection.getConnection().prepareStatement(query);
+			statement.setString(1, user.getName());
+			statement.setString(2, user.getUsername());
+			statement.setString(3, user.getPassword());
+			statement.setInt(4, user.getId());
+			statement.execute();
+		} catch (Exception exception) {
+			Logger.getLogger(UserRepository.class.getName()).log(Level.SEVERE, null, exception);
+			throw new FailedToUpdateUserException("Falha ao atualizar os dados do usuário! Tente novamente.");
+		} finally {
+			connection.disconnect();
+		}
 	}
 	
 }

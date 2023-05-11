@@ -6,6 +6,7 @@ import java.util.Optional;
 import br.com.controledeveiculos.entity.User;
 import br.com.controledeveiculos.exception.FailedToFetchUserException;
 import br.com.controledeveiculos.exception.FailedToRegisterUserException;
+import br.com.controledeveiculos.exception.FailedToUpdateUserException;
 import br.com.controledeveiculos.repository.UserRepository;
 
 public class UserService {
@@ -34,6 +35,10 @@ public class UserService {
 			return true;
 		}
 		return false;
+	}
+	
+	public void update(User user) throws FailedToUpdateUserException {
+		repository.update(user);
 	}
 	
 }

@@ -12,6 +12,7 @@ import br.com.controledeveiculos.view.LoginScreen;
 import br.com.controledeveiculos.view.RegisterVehicleScreen;
 import br.com.controledeveiculos.view.VehicleSoldListScreen;
 import br.com.controledeveiculos.view.AvailableVehicleListScreen;
+import br.com.controledeveiculos.view.EditUserScreen;
 
 public class MenuBar extends JMenuBar {
 
@@ -55,7 +56,8 @@ public class MenuBar extends JMenuBar {
 		editUser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-	
+				screen.dispose();
+				new EditUserScreen();
 			}
 		});
 		JMenuItem logout = new JMenuItem("Sair");
