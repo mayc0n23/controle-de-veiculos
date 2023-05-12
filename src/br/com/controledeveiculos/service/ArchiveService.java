@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import java.util.List;
 
 import br.com.controledeveiculos.entity.Archive;
@@ -33,12 +34,14 @@ public class ArchiveService {
 	
 	public void openFiles(List<Archive> archives) {
 		archives.forEach(archive -> {
-			File file = new File("files/" + archive.getFilename());
 			try {
-				FileOutputStream outputStream = new FileOutputStream(file);
-				outputStream.write(archive.getArchive());
-				Desktop.getDesktop().open(file);
-				outputStream.close();
+				String filename = archive.getFilename();
+				String extension = filename.substring(filename.lastIndexOf("."));
+				File tempFile = File.createTempFile(filename, extension);
+				try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+					fos.write(archive.getArchive());
+				}
+				Desktop.getDesktop().open(tempFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

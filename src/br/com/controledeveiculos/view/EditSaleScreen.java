@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import java.util.List;
 
 import javax.swing.JButton;
@@ -57,7 +58,7 @@ public class EditSaleScreen extends LargeView {
 	private ArchiveService archiveService;
 	
 	public EditSaleScreen(int vehicleId) {
-		this.setTitle(this.getTitle() + "Vender veículo");
+		this.setTitle(this.getTitle() + "Editar venda");
 		this.setVisible(true);
 		this.service = new VehicleService();
 		this.archiveService = new ArchiveService();
@@ -450,23 +451,25 @@ public class EditSaleScreen extends LargeView {
 	private void populateFiles(List<Archive> archives) {
 		for (int i = 0; i < archives.size(); i++) {
 			Archive archive = archives.get(i);
-			File file = new File("files/" + archive.getFilename());
 			try {
-				FileOutputStream outputStream = new FileOutputStream(file);
-				outputStream.write(archive.getArchive());
-				outputStream.close();
+				String filename = archive.getFilename();
+				String extension = filename.substring(filename.lastIndexOf("."));
+				File tempFile = File.createTempFile(filename, extension);
+				try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+					fos.write(archive.getArchive());
+				}
+				if (i == 0) {
+					firstFileChooser.setSelectedFile(tempFile);
+					firstFileChooserLabel.setText(archive.getFilename());
+				} else if (i == 1) {
+					secondFileChooser.setSelectedFile(tempFile);
+					secondFileChooserLabel.setText(archive.getFilename());
+				} else if (i == 2) {
+					thirdFileChooser.setSelectedFile(tempFile);
+					thirdFileChooserLabel.setText(archive.getFilename());
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			if (i == 0) {
-				firstFileChooser.setSelectedFile(file);
-				firstFileChooserLabel.setText(archive.getFilename());
-			} else if (i == 1) {
-				secondFileChooser.setSelectedFile(file);
-				secondFileChooserLabel.setText(archive.getFilename());
-			} else if (i == 2) {
-				thirdFileChooser.setSelectedFile(file);
-				thirdFileChooserLabel.setText(archive.getFilename());
 			}
 		}
 	}
