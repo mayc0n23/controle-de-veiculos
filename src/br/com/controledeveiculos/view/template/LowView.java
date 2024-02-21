@@ -12,7 +12,7 @@ public abstract class LowView extends JFrame {
 	private static final long serialVersionUID = -851529012006836848L;
 	
 	public LowView() {
-		this.setSize(400, 350);
+		this.setSize(415, 350);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(null);
 		this.setResizable(false);

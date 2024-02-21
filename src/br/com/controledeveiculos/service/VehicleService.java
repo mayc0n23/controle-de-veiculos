@@ -25,7 +25,7 @@ public class VehicleService {
 		return this.repository.findAllSold();
 	}
 	
-	public boolean register(Vehicle vehicle) throws FailedToRegisterVehicleException {
+	public int register(Vehicle vehicle) throws FailedToRegisterVehicleException {
 		return this.repository.register(vehicle);
 	}
 	
@@ -35,7 +35,7 @@ public class VehicleService {
 	
 	public Vehicle searchById(int vehicleId) throws VehicleNotFoundException {
 		return this.repository.findById(vehicleId)
-				.orElseThrow(() -> new VehicleNotFoundException("Veículo não encontrado."));
+				.orElseThrow(() -> new VehicleNotFoundException("Veï¿½culo nï¿½o encontrado."));
 	}
 	
 	public void updateAvailableVehicle(Vehicle vehicle) throws FailedToUpdateVehicleException {

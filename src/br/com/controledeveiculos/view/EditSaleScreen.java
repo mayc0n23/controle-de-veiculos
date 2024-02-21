@@ -22,6 +22,7 @@ import br.com.controledeveiculos.actions.EditSaleAction;
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Archive;
 import br.com.controledeveiculos.entity.Vehicle;
+import br.com.controledeveiculos.enums.FileType;
 import br.com.controledeveiculos.exception.VehicleNotFoundException;
 import br.com.controledeveiculos.service.ArchiveService;
 import br.com.controledeveiculos.service.VehicleService;
@@ -46,12 +47,10 @@ public class EditSaleScreen extends LargeView {
 	
 	private JFileChooser firstFileChooser;
 	private JFileChooser secondFileChooser;
-	private JFileChooser thirdFileChooser;
 	private JButton save;
 	
 	private JLabel firstFileChooserLabel;
 	private JLabel secondFileChooserLabel;
-	private JLabel thirdFileChooserLabel;
 	
 	private Vehicle vehicle;
 	private VehicleService service;
@@ -64,13 +63,13 @@ public class EditSaleScreen extends LargeView {
 		this.archiveService = new ArchiveService();
 		try {
 			this.vehicle = this.service.searchById(vehicleId);
-			List<Archive> archives = archiveService.searchByVehicleId(vehicleId);
+			List<Archive> archives = archiveService.searchByVehicleIdAndFileType(vehicleId, FileType.VEHICLE);
 			this.populateData();
 			this.addFileChooser();
 			this.populateFiles(archives);
 			save.addActionListener(new EditSaleAction(this, vehicle));
 		} catch (VehicleNotFoundException exception) {
-			JOptionPane.showMessageDialog(null, "Ocorreu uma falha ao tentar encontrar o veículo! Tente novamente.");
+			JOptionPane.showMessageDialog(null, "Ocorreu uma falha ao tentar encontrar o veï¿½culo! Tente novamente.");
 			new AvailableVehicleListScreen();
 			dispose();
 		}
@@ -79,7 +78,7 @@ public class EditSaleScreen extends LargeView {
 	@Override
 	public void addLabels() { 
 		JLabel vehicleLabel = new JLabel();
-		vehicleLabel.setText("Dados do veículo");
+		vehicleLabel.setText("Dados do veï¿½culo");
 		vehicleLabel.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		vehicleLabel.setForeground(Color.BLACK);
 		vehicleLabel.setVisible(true);
@@ -87,7 +86,7 @@ public class EditSaleScreen extends LargeView {
 		this.add(vehicleLabel);
 		
 		JLabel descriptionLabel = new JLabel();
-		descriptionLabel.setText("Descrição");
+		descriptionLabel.setText("Descriï¿½ï¿½o");
 		descriptionLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		descriptionLabel.setForeground(Color.BLACK);
 		descriptionLabel.setVisible(true);
@@ -103,7 +102,7 @@ public class EditSaleScreen extends LargeView {
 		this.add(plateLabel);
 		
 		JLabel priceLabel = new JLabel();
-		priceLabel.setText("Preço");
+		priceLabel.setText("Preï¿½o");
 		priceLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		priceLabel.setForeground(Color.BLACK);
 		priceLabel.setVisible(true);
@@ -135,7 +134,7 @@ public class EditSaleScreen extends LargeView {
 		this.add(buyerNameLabel);
 		
 		JLabel buyerAddressLabel = new JLabel();
-		buyerAddressLabel.setText("Endereço *");
+		buyerAddressLabel.setText("Endereï¿½o *");
 		buyerAddressLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		buyerAddressLabel.setForeground(Color.BLACK);
 		buyerAddressLabel.setVisible(true);
@@ -143,7 +142,7 @@ public class EditSaleScreen extends LargeView {
 		this.add(buyerAddressLabel);
 		
 		JLabel buyerPaymentDescriptionLabel = new JLabel();
-		buyerPaymentDescriptionLabel.setText("Descrição do pagamento *");
+		buyerPaymentDescriptionLabel.setText("Descriï¿½ï¿½o do pagamento *");
 		buyerPaymentDescriptionLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		buyerPaymentDescriptionLabel.setForeground(Color.BLACK);
 		buyerPaymentDescriptionLabel.setVisible(true);
@@ -179,7 +178,7 @@ public class EditSaleScreen extends LargeView {
 		firstFileChooserLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		firstFileChooserLabel.setForeground(Color.BLACK);
 		firstFileChooserLabel.setVisible(true);
-		firstFileChooserLabel.setBounds(240, 437, 150, 16);
+		firstFileChooserLabel.setBounds(240, 487, 150, 16);
 		this.add(firstFileChooserLabel);
 		
 		secondFileChooserLabel = new JLabel();
@@ -187,16 +186,8 @@ public class EditSaleScreen extends LargeView {
 		secondFileChooserLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		secondFileChooserLabel.setForeground(Color.BLACK);
 		secondFileChooserLabel.setVisible(true);
-		secondFileChooserLabel.setBounds(240, 487, 150, 16);
+		secondFileChooserLabel.setBounds(240, 537, 150, 16);
 		this.add(secondFileChooserLabel);
-		
-		thirdFileChooserLabel = new JLabel();
-		thirdFileChooserLabel.setText("Nenhum arquivo selecionado...");
-		thirdFileChooserLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-		thirdFileChooserLabel.setForeground(Color.BLACK);
-		thirdFileChooserLabel.setVisible(true);
-		thirdFileChooserLabel.setBounds(240, 537, 150, 16);
-		this.add(thirdFileChooserLabel);
 	}
 
 	@Override
@@ -207,7 +198,7 @@ public class EditSaleScreen extends LargeView {
 		uploadFirstFile.setOpaque(true);
 		uploadFirstFile.setBackground(Color.BLACK);
 		uploadFirstFile.setForeground(Color.BLACK);
-		uploadFirstFile.setBounds(20, 430, 200, 30);
+		uploadFirstFile.setBounds(20, 480, 200, 30);
 		uploadFirstFile.addActionListener(new ActionListener() {
 			
 			@Override
@@ -242,7 +233,7 @@ public class EditSaleScreen extends LargeView {
 			}
 			
 		});
-		deleteFirstFile.setBounds(570, 430, 200, 30);
+		deleteFirstFile.setBounds(570, 480, 200, 30);
 		
 		this.add(deleteFirstFile);
 		
@@ -252,7 +243,7 @@ public class EditSaleScreen extends LargeView {
 		uploadSecondFile.setOpaque(true);
 		uploadSecondFile.setBackground(Color.BLACK);
 		uploadSecondFile.setForeground(Color.BLACK);
-		uploadSecondFile.setBounds(20, 480, 200, 30);
+		uploadSecondFile.setBounds(20, 530, 200, 30);
 		uploadSecondFile.addActionListener(new ActionListener() {
 			
 			@Override
@@ -274,7 +265,7 @@ public class EditSaleScreen extends LargeView {
 		deleteSecondFile.setOpaque(true);
 		deleteSecondFile.setBackground(Color.BLACK);
 		deleteSecondFile.setForeground(Color.RED);
-		deleteSecondFile.setBounds(570, 480, 200, 30);
+		deleteSecondFile.setBounds(570, 530, 200, 30);
 		deleteSecondFile.addActionListener(new ActionListener() {
 			
 			@Override
@@ -290,57 +281,13 @@ public class EditSaleScreen extends LargeView {
 		});
 		this.add(deleteSecondFile);
 		
-		JButton uploadThirdFile = new JButton();
-		uploadThirdFile.setText("Subir arquivo 3");
-		uploadThirdFile.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		uploadThirdFile.setOpaque(true);
-		uploadThirdFile.setBackground(Color.BLACK);
-		uploadThirdFile.setForeground(Color.BLACK);
-		uploadThirdFile.setBounds(20, 530, 200, 30);
-		uploadThirdFile.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int response = thirdFileChooser.showOpenDialog(null);
-				
-				if (JFileChooser.APPROVE_OPTION == response) {
-					File file = thirdFileChooser.getSelectedFile();
-					thirdFileChooserLabel.setText(file.getName());
-				}
-			}
-			
-		});
-		this.add(uploadThirdFile);
-		
-		JButton deleteThirdFile = new JButton();
-		deleteThirdFile.setText("Remover arquivo 3");
-		deleteThirdFile.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		deleteThirdFile.setOpaque(true);
-		deleteThirdFile.setBackground(Color.BLACK);
-		deleteThirdFile.setForeground(Color.RED);
-		deleteThirdFile.setBounds(570, 530, 200, 30);
-		deleteThirdFile.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (thirdFileChooser.getSelectedFile() != null) {
-					thirdFileChooser.setSelectedFile(null);
-					thirdFileChooserLabel.setText("Nenhum arquivo selecionado...");
-				} else {
-					JOptionPane.showMessageDialog(null, "Nenhum arquivo selecionado.");
-				}
-			}
-			
-		});
-		this.add(deleteThirdFile);
-		
 		save = new JButton();
 		save.setText("Salvar");
 		save.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		save.setOpaque(true);
 		save.setBackground(Color.BLACK);
 		save.setForeground(Color.BLACK);
-		save.setBounds(300, 590, 200, 30);
+		save.setBounds(300, 640, 200, 30);
 		save.addActionListener(new EditSaleAction(this, vehicle));
 		this.add(save);
 		
@@ -429,10 +376,6 @@ public class EditSaleScreen extends LargeView {
 		secondFileChooser = new JFileChooser();
 		secondFileChooser.setAcceptAllFileFilterUsed(false);
 		secondFileChooser.addChoosableFileFilter(filter);
-		
-		thirdFileChooser = new JFileChooser();
-		thirdFileChooser.setAcceptAllFileFilterUsed(false);
-		thirdFileChooser.addChoosableFileFilter(filter);
 	}
 	
 	private void populateData() {
@@ -464,9 +407,6 @@ public class EditSaleScreen extends LargeView {
 				} else if (i == 1) {
 					secondFileChooser.setSelectedFile(tempFile);
 					secondFileChooserLabel.setText(archive.getFilename());
-				} else if (i == 2) {
-					thirdFileChooser.setSelectedFile(tempFile);
-					thirdFileChooserLabel.setText(archive.getFilename());
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -504,10 +444,6 @@ public class EditSaleScreen extends LargeView {
 
 	public JFileChooser getSecondFileChooser() {
 		return secondFileChooser;
-	}
-
-	public JFileChooser getThirdFileChooser() {
-		return thirdFileChooser;
 	}
 
 }

@@ -1,5 +1,7 @@
 package br.com.controledeveiculos.entity;
 
+import br.com.controledeveiculos.enums.FileType;
+
 public class Archive {
 	
 	private int id;
@@ -9,6 +11,8 @@ public class Archive {
 	private String filename;
 	
 	private byte[] archive;
+
+	private FileType fileType;
 
 	public int getId() {
 		return id;
@@ -41,5 +45,12 @@ public class Archive {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-	
+
+	public void setFileType(FileType fileType) {
+		this.fileType = fileType;
+	}
+
+	public FileType getFileType() {
+		return fileType;
+	}
 }

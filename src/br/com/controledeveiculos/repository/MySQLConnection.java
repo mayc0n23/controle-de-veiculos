@@ -29,7 +29,7 @@ public class MySQLConnection {
 		try {
 			String driver = "com.mysql.cj.jdbc.Driver";
 			Class.forName(driver);
-			String url = "jdbc:mysql://localhost:3306/cvc?useTimezone=true&serverTimezone=UTC";
+			String url = "jdbc:mysql://localhost:3306/cvc?useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
 			String username = "root";
 			String password = "maycon";
 			connection = DriverManager.getConnection(url, username, password);

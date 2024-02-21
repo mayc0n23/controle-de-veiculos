@@ -12,7 +12,7 @@ public abstract class LargeView extends JFrame {
 	private static final long serialVersionUID = 1956133753681180986L;
 	
 	public LargeView() {
-		this.setSize(800, 700);
+		this.setSize(815, 800);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(null);
 		this.setResizable(false);

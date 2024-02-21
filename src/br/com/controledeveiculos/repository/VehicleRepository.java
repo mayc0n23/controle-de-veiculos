@@ -2,6 +2,7 @@ package br.com.controledeveiculos.repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -95,12 +96,12 @@ public class VehicleRepository {
 		return vehicles;
 	}
 	
-	public boolean register(Vehicle vehicle) throws FailedToRegisterVehicleException {
+	public int register(Vehicle vehicle) throws FailedToRegisterVehicleException {
 		connection = MySQLConnection.getInstance();
 		String query = "INSERT INTO vehicle (description, plate, chassis, renavam, sale_price, observation, type, in_name, in_address, in_phone, in_payment_description, in_rg, in_cpf) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 			connection.connect();
-			statement = connection.getConnection().prepareStatement(query);
+			statement = connection.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, vehicle.getDescription());
 			statement.setString(2, vehicle.getPlate());
 			statement.setString(3, vehicle.getChassis());
@@ -114,11 +115,20 @@ public class VehicleRepository {
 			statement.setString(11, vehicle.getInPaymentDescription());
 			statement.setString(12, vehicle.getInRg());
 			statement.setString(13, vehicle.getInCpf());
-			statement.execute();
-			return true;
+			int rowsAffected = statement.executeUpdate();
+			if (rowsAffected == 1) {
+				ResultSet generatedKeys = statement.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					return generatedKeys.getInt(1);
+				} else {
+					throw new FailedToRegisterVehicleException("Falha ao obter o ID do veÃ­culo inserido");
+				}
+			} else {
+				throw new FailedToRegisterVehicleException("Falha ao cadastrar o veÃ­culo! Nenhuma linha afetada.");
+			}
 		} catch (Exception exception) {
 			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
-			throw new FailedToRegisterVehicleException("Falha ao cadastrar o veículo! Tente novamente.");
+			throw new FailedToRegisterVehicleException("Falha ao cadastrar o veï¿½culo! Tente novamente.");
 		} finally {
 			connection.disconnect();
 		}
@@ -135,7 +145,7 @@ public class VehicleRepository {
 			return true;
 		} catch (Exception exception) {
 			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
-			throw new FailedToDeleteVehicleException("Falha ao excluir o veículo! Tente novamente.");
+			throw new FailedToDeleteVehicleException("Falha ao excluir o veï¿½culo! Tente novamente.");
 		} finally {
 			connection.disconnect();
 		}
@@ -204,7 +214,7 @@ public class VehicleRepository {
 			statement.execute();
 		} catch (Exception exception) {
 			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
-			throw new FailedToUpdateVehicleException("Falha ao atualizar os dados do veículo! Tente novamente.");
+			throw new FailedToUpdateVehicleException("Falha ao atualizar os dados do veï¿½culo! Tente novamente.");
 		} finally {
 			connection.disconnect();
 		}
@@ -226,7 +236,7 @@ public class VehicleRepository {
 			statement.execute();
 		} catch (Exception exception) {
 			Logger.getLogger(VehicleRepository.class.getName()).log(Level.SEVERE, null, exception);
-			throw new FailedToUpdateVehicleException("Falha ao atualizar os dados do veículo! Tente novamente.");
+			throw new FailedToUpdateVehicleException("Falha ao atualizar os dados do veï¿½culo! Tente novamente.");
 		} finally {
 			connection.disconnect();
 		}

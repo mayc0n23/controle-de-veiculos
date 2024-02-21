@@ -43,7 +43,7 @@ public class SellVehicleAction implements ActionListener {
 				if (hasFiles()) {
 					saveFiles();
 				}
-				JOptionPane.showMessageDialog(null, "Veículo editado com sucesso!");
+				JOptionPane.showMessageDialog(null, "Veï¿½culo editado com sucesso!");
 				new VehicleSoldListScreen();
 				screen.dispose();
 			} catch (FailedToUpdateVehicleException exception) {
@@ -73,8 +73,7 @@ public class SellVehicleAction implements ActionListener {
 	
 	private boolean hasFiles() {
 		return screen.getFirstFileChooser().getSelectedFile() != null ||
-				screen.getSecondFileChooser().getSelectedFile() != null ||
-				screen.getThirdFileChooser().getSelectedFile() != null;
+				screen.getSecondFileChooser().getSelectedFile() != null;
 	}
 	
 	private void saveFiles() {
@@ -95,21 +94,6 @@ public class SellVehicleAction implements ActionListener {
 		
 		if (screen.getSecondFileChooser().getSelectedFile() != null) {
 			File file = screen.getSecondFileChooser().getSelectedFile();
-			try {
-				byte[] fileContent = Files.readAllBytes(file.toPath());
-				Archive archive = new Archive();
-				archive.setVehicleId(vehicle.getId());
-				archive.setFilename(file.getName());
-				archive.setArchive(fileContent);
-				this.archiveService.saveArchive(archive);
-			} catch (IOException | FailedToSaveFileException e) {
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(null, e.getMessage());
-			}
-		}
-		
-		if (screen.getThirdFileChooser().getSelectedFile() != null) {
-			File file = screen.getThirdFileChooser().getSelectedFile();
 			try {
 				byte[] fileContent = Files.readAllBytes(file.toPath());
 				Archive archive = new Archive();

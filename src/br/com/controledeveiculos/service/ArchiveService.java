@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 import br.com.controledeveiculos.entity.Archive;
+import br.com.controledeveiculos.enums.FileType;
 import br.com.controledeveiculos.exception.FailedToDeleteFileException;
 import br.com.controledeveiculos.exception.FailedToSaveFileException;
 import br.com.controledeveiculos.repository.ArchiveRepository;
@@ -28,8 +29,8 @@ public class ArchiveService {
 		repository.delete(vehicleId);
 	}
 	
-	public List<Archive> searchByVehicleId(int vehicleId) {
-		return repository.findByVehicleId(vehicleId);
+	public List<Archive> searchByVehicleIdAndFileType(int vehicleId, FileType fileType) {
+		return repository.findByVehicleIdAndFileType(vehicleId, fileType.name());
 	}
 	
 	public void openFiles(List<Archive> archives) {

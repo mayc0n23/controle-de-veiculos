@@ -20,6 +20,7 @@ import javax.swing.table.TableRowSorter;
 import br.com.controledeveiculos.components.MenuBar;
 import br.com.controledeveiculos.entity.Archive;
 import br.com.controledeveiculos.entity.Vehicle;
+import br.com.controledeveiculos.enums.FileType;
 import br.com.controledeveiculos.exception.FailedToDeleteFileException;
 import br.com.controledeveiculos.exception.FailedToDeleteVehicleException;
 import br.com.controledeveiculos.service.ArchiveService;
@@ -41,7 +42,7 @@ public class VehicleSoldListScreen extends LargeView {
 	private JButton filter;
 	
 	public VehicleSoldListScreen() {
-		this.setTitle(this.getTitle() + "Lista de veículos vendidos");
+		this.setTitle(this.getTitle() + "Lista de veï¿½culos vendidos");
 		this.setVisible(true);
 		filter.addActionListener(new ActionListener() {
 			
@@ -58,7 +59,7 @@ public class VehicleSoldListScreen extends LargeView {
 	@Override
 	public void addLabels() {
 		JLabel userLoggedMessage = new JLabel();
-		userLoggedMessage.setText("Olá, " + UserService.USER_LOGGED.getName());
+		userLoggedMessage.setText("Olï¿½, " + UserService.USER_LOGGED.getName());
 		userLoggedMessage.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		userLoggedMessage.setForeground(Color.BLACK);
 		userLoggedMessage.setVisible(true);
@@ -79,7 +80,7 @@ public class VehicleSoldListScreen extends LargeView {
 		archiveService = new ArchiveService();
 		
 		JButton edit = new JButton();
-		edit.setText("Editar veículo");
+		edit.setText("Editar veï¿½culo");
 		edit.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		edit.setOpaque(true);
 		edit.setBackground(Color.BLACK);
@@ -103,7 +104,7 @@ public class VehicleSoldListScreen extends LargeView {
 					new EditSoldVehicleScreen(getVehicleId());
 					dispose();
 				} else {
-					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+					JOptionPane.showMessageDialog(null, "Nenhum veï¿½culo estï¿½ selecionado.");
 				}
 			}
 			
@@ -123,13 +124,13 @@ public class VehicleSoldListScreen extends LargeView {
 			public void actionPerformed(ActionEvent e) {
 				if (vehiclesTable.getSelectedRow() >= 0) {
 					String vehicleDescription = getVehicleDescription();
-					int confirmDialogResponse = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o veículo '" + vehicleDescription + "'?", "Excluir veículo", 0);
+					int confirmDialogResponse = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o veï¿½culo '" + vehicleDescription + "'?", "Excluir veï¿½culo", 0);
 					if (confirmDialogResponse == 0) {
 						deleteVehicleFromDatabase();
 						deleteVehicleFromTable();
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+					JOptionPane.showMessageDialog(null, "Nenhum veï¿½culo estï¿½ selecionado.");
 				}
 			}
 			
@@ -183,14 +184,14 @@ public class VehicleSoldListScreen extends LargeView {
 			public void actionPerformed(ActionEvent e) {
 				if (vehiclesTable.getSelectedRow() >= 0) {
 					int vehicleId = getVehicleId();
-					List<Archive> archives = archiveService.searchByVehicleId(vehicleId);
+					List<Archive> archives = archiveService.searchByVehicleIdAndFileType(vehicleId, FileType.VEHICLE);
 					if (!archives.isEmpty()) {
 						archiveService.openFiles(archives);
 					} else {
-						JOptionPane.showMessageDialog(null, "O veículo selecionado não possui nenhum arquivo.");
+						JOptionPane.showMessageDialog(null, "O veï¿½culo selecionado nï¿½o possui nenhum arquivo.");
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+					JOptionPane.showMessageDialog(null, "Nenhum veï¿½culo estï¿½ selecionado.");
 				}
 			}
 			
@@ -223,7 +224,7 @@ public class VehicleSoldListScreen extends LargeView {
 					new EditSaleScreen(vehicleId);
 					dispose();
 				} else {
-					JOptionPane.showMessageDialog(null, "Nenhum veículo está selecionado.");
+					JOptionPane.showMessageDialog(null, "Nenhum veï¿½culo estï¿½ selecionado.");
 				}
 			}
 			
@@ -276,7 +277,7 @@ public class VehicleSoldListScreen extends LargeView {
 		vehiclesTable.getTableHeader().setReorderingAllowed(false);
 		vehiclesTable.setFont(new Font("Times New Roman", Font.PLAIN, 12));
 		
-		String[] vehicleColumns = {"ID", "TIPO", "DESCRIÇÃO", "PLACA", "CHASSI", "RENAVAM", "COMPRADOR"};
+		String[] vehicleColumns = {"ID", "TIPO", "DESCRIï¿½ï¿½O", "PLACA", "CHASSI", "RENAVAM", "COMPRADOR"};
 		for(String column: vehicleColumns) {
 			vehicleTableModel.addColumn(column);
 		}

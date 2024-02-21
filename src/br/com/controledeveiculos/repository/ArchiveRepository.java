@@ -22,7 +22,7 @@ public class ArchiveRepository {
 	
 	public void save(Archive archive) throws FailedToSaveFileException {
 		connection = MySQLConnection.getInstance();
-		String query = "INSERT INTO file_storage (vehicle_id, filename, archive) values (?, ?, ?)";
+		String query = "INSERT INTO file_storage (vehicle_id, filename, archive, filetype) values (?, ?, ?, ?)";
 		try {
 			connection.connect();
 			statement = connection.getConnection().prepareStatement(query);
@@ -31,6 +31,7 @@ public class ArchiveRepository {
 			Blob blob = connection.getConnection().createBlob();
 			blob.setBytes(1, archive.getArchive());
 			statement.setBlob(3, blob);
+			statement.setString(4, archive.getFileType().name());
 			statement.execute();
 		} catch (Exception exception) {
 			Logger.getLogger(ArchiveRepository.class.getName()).log(Level.SEVERE, null, exception);
@@ -57,14 +58,15 @@ public class ArchiveRepository {
 		}
 	}
 	
-	public List<Archive> findByVehicleId(int vehicleId) {
+	public List<Archive> findByVehicleIdAndFileType(int vehicleId, String fileType) {
 		List<Archive> archives = new ArrayList<>();
 		connection = MySQLConnection.getInstance();
-		String sql = "SELECT * FROM file_storage WHERE vehicle_id = ?";
+		String sql = "SELECT * FROM file_storage WHERE vehicle_id = ? and filetype = ?";
 		try {
 			connection.connect();
 			statement = connection.getConnection().prepareStatement(sql);
 			statement.setInt(1, vehicleId);
+			statement.setString(2, fileType);
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				Archive archive = new Archive();

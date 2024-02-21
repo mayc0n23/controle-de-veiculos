@@ -2,11 +2,18 @@ package br.com.controledeveiculos.actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import javax.swing.JOptionPane;
 
+import br.com.controledeveiculos.entity.Archive;
 import br.com.controledeveiculos.entity.Vehicle;
+import br.com.controledeveiculos.enums.FileType;
 import br.com.controledeveiculos.exception.FailedToRegisterVehicleException;
+import br.com.controledeveiculos.exception.FailedToSaveFileException;
+import br.com.controledeveiculos.service.ArchiveService;
 import br.com.controledeveiculos.service.VehicleService;
 import br.com.controledeveiculos.view.AvailableVehicleListScreen;
 import br.com.controledeveiculos.view.RegisterVehicleScreen;
@@ -14,12 +21,15 @@ import br.com.controledeveiculos.view.RegisterVehicleScreen;
 public class RegisterVehicleAction implements ActionListener {
 	
 	private VehicleService vehicleService;
+
+	private ArchiveService archiveService;
 	
 	private RegisterVehicleScreen screen;
 	
 	public RegisterVehicleAction(RegisterVehicleScreen screen) {
 		this.screen = screen;
 		this.vehicleService = new VehicleService();
+		this.archiveService = new ArchiveService();
 	}
 
 	@Override
@@ -27,8 +37,11 @@ public class RegisterVehicleAction implements ActionListener {
 		if (isValidForm()) {
 			Vehicle vehicle = buildVehicle();
 			try {
-				this.vehicleService.register(vehicle);
-				JOptionPane.showMessageDialog(null, "Veículo cadastrado com sucesso!");
+				int vehicleId = this.vehicleService.register(vehicle);
+				if (hasFiles()) {
+					saveFiles(vehicleId);
+				}
+				JOptionPane.showMessageDialog(null, "Veï¿½culo cadastrado com sucesso!");
 				new AvailableVehicleListScreen();
 				screen.dispose();
 			} catch (FailedToRegisterVehicleException exception) {
@@ -67,6 +80,45 @@ public class RegisterVehicleAction implements ActionListener {
 		String vehicleType = (String) screen.getVehicleTypeField().getSelectedItem();
 		vehicle.setType(vehicleType);
 		return vehicle;
+	}
+
+	private boolean hasFiles() {
+		return screen.getVehicleFirstFileChooser().getSelectedFile() != null ||
+				screen.getVehicleSecondFileChooser().getSelectedFile() != null;
+	}
+
+	private void saveFiles(int vehicleId) {
+		if (screen.getVehicleFirstFileChooser().getSelectedFile() != null) {
+			File file = screen.getVehicleFirstFileChooser().getSelectedFile();
+			try {
+				byte[] fileContent = Files.readAllBytes(file.toPath());
+				Archive archive = new Archive();
+				archive.setVehicleId(vehicleId);
+				archive.setFilename(file.getName());
+				archive.setArchive(fileContent);
+				archive.setFileType(FileType.VEHICLE);
+				this.archiveService.saveArchive(archive);
+			} catch (IOException | FailedToSaveFileException e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+			}
+		}
+
+		if (screen.getVehicleSecondFileChooser().getSelectedFile() != null) {
+			File file = screen.getVehicleSecondFileChooser().getSelectedFile();
+			try {
+				byte[] fileContent = Files.readAllBytes(file.toPath());
+				Archive archive = new Archive();
+				archive.setVehicleId(vehicleId);
+				archive.setFilename(file.getName());
+				archive.setArchive(fileContent);
+				archive.setFileType(FileType.VEHICLE);
+				this.archiveService.saveArchive(archive);
+			} catch (IOException | FailedToSaveFileException e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+			}
+		}
 	}
 
 }
